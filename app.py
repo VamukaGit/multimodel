@@ -6,8 +6,8 @@ import requests
 import io
 from PIL import Image
 import os
-import sounddevice as sd
-import soundfile as sf
+#import sounddevice as sd
+#import soundfile as sf
 import tempfile
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
@@ -36,24 +36,7 @@ def get_aws_clients():
 
 # Audio recording utility
 def record_audio(duration=5, samplerate=16000):
-    try:
-        # Check if any audio input devices are available
-        devices = sd.query_devices()
-        input_devices = [d for d in devices if d['max_input_channels'] > 0]
-        
-        if not input_devices:
-            st.error("No audio input devices found. Please check your microphone.")
-            return None
-        
-        st.info(f"Recording for {duration} seconds...")
-        recording = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=1, dtype='int16')
-        sd.wait()
-        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.wav')
-        sf.write(temp_file.name, recording, samplerate)
-        return temp_file.name
-    except Exception as e:
-        st.error(f"Audio recording failed: {str(e)}")
-        st.info("This might be due to microphone permissions or audio device issues.")
+    
         return None
 
 def generate_text(prompt, bedrock_client):
